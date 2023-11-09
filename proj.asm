@@ -181,9 +181,14 @@
                 PUSH BX
                 LEA BX, TABELA + BX
             LOOPSOMA:
-                ADD AX, [BX + SI]
+                ADD AL, [BX + SI]       ;PORQUE AX TEM LIXO??
                 INC SI
             LOOP LOOPSOMA
+                PUSH BX
+                XOR DX, DX
+                MOV BX, 3
+                DIV BX
+                POP BX
 
                 MOV [BX + SI], AX   ;ERRO??? NAO DEU UHUUUUUUUUUUUUUUU
 
