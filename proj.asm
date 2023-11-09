@@ -57,7 +57,11 @@
 
 
         PULALINHA
-
+                                        ;PARA TESTE
+                                        JMP SALTOU1
+                                            JMPSALVA2:
+                                            JMP LOOPNOMES
+                                        SALTOU1:
 
         LEA DX, NOME                ;IMPRIME A MENSAGEM EM 'NOME'
         MOV AH, 9                   
@@ -73,11 +77,7 @@
                                                         INT 21H
 
         PULALINHA
-                                        ;PARA TESTE
-                                        JMP SALTOU
-                                            JMPSALVA:
-                                            JMP LOOPNOMES
-                                        SALTOU:
+
         PUSH CX
         MOV CX, 3
 
@@ -90,6 +90,13 @@
         MOV AH, 09h
         INT 21H
         
+
+                                            ;PARA TESTE
+                                            JMP SALTOU2
+                                                JMPSALVA1:
+                                                JMP JMPSALVA2
+                                            SALTOU2:
+
         CALL ENTNOTAS
 
                                                         PULALINHA
@@ -98,6 +105,7 @@
                                                         MOV AH, 02
                                                         DEC SI
                                                         MOV DX, [BX + SI]
+                                                        INC SI
                                                         OR DX, 30H
                                                         INT 21H
                                                         POP BX
@@ -107,13 +115,23 @@
     LOOP RECEBENOTA
     POP CX
 
-        ;CALL MEDIA
+        CALL MEDIA
+                                                        PULALINHA
+                                                        PUSH BX
+                                                        MOV BX, DX
+                                                        MOV AH, 02
+                                                        MOV DX, [BX + SI]
+                                                        OR DX, 30H
+                                                        INT 21H
+                                                        POP BX
+
+
 
 
         ADD BX, 38                  ;aponta para o proximo nome(linha de baixo)
         DEC CX
         CMP CX, 0
-        JNE JMPSALVA
+        JNE JMPSALVA1
 
 
 
@@ -156,18 +174,21 @@
                 LEA BX, TABELA + 34
                 MOV SI, BX
                 MOV CX, 3
-                POP BX
-                XOR DI, DI
                 XOR AX, AX
+
+
+                POP BX
+                PUSH BX
+                LEA BX, TABELA + BX
             LOOPSOMA:
-                MOV AX, [BX + SI]
-                ;XOR AH, AH
-                ADD DI, AX
+                ADD AX, [BX + SI]
                 INC SI
             LOOP LOOPSOMA
 
-                ;MOV [BX + SI], DI   ;ERRO???
+                MOV [BX + SI], AX   ;ERRO??? NAO DEU UHUUUUUUUUUUUUUUU
 
+                                                    MOV DX, BX ;APENAS PARA TESTE
+                POP BX
                 POP CX
                 RET
             MEDIA ENDP
