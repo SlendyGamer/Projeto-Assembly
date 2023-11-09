@@ -57,11 +57,7 @@
 
 
         PULALINHA
-                                        ;PARA TESTE
-                                        JMP SALTOU1
-                                            JMPSALVA2:
-                                            JMP LOOPNOMES
-                                        SALTOU1:
+
 
         LEA DX, NOME                ;IMPRIME A MENSAGEM EM 'NOME'
         MOV AH, 9                   
@@ -71,10 +67,6 @@
         LEA DX, TABELA + BX          ;APONTA PARA TABELA + BX (BX INDICA QUAL NOME IRA RECEBER(1º, 2º, 3º...))
         CALL RECEBE_NOME
         
-                                                        PULALINHA
-                                                        ADD DX, 2
-                                                        MOV AH, 09    ;CONFERE SE NOME FOI SALVO
-                                                        INT 21H
 
         PULALINHA
 
@@ -91,49 +83,17 @@
         INT 21H
         
 
-                                            ;PARA TESTE
-                                            JMP SALTOU2
-                                                JMPSALVA1:
-                                                JMP JMPSALVA2
-                                            SALTOU2:
-
         CALL ENTNOTAS
 
-                                                        PULALINHA
-                                                        PUSH BX
-                                                        MOV BX, DX
-                                                        MOV AH, 02
-                                                        DEC SI
-                                                        MOV DX, [BX + SI]
-                                                        INC SI
-                                                        OR DX, 30H
-                                                        INT 21H
-                                                        POP BX
-
-        PULALINHA
 
     LOOP RECEBENOTA
     POP CX
 
         CALL MEDIA
-                                                        PULALINHA
-                                                        PUSH BX
-                                                        MOV BX, DX
-                                                        MOV AH, 02
-                                                        MOV DX, [BX + SI]
-                                                        OR DX, 30H
-                                                        INT 21H
-                                                        POP BX
-
-
 
 
         ADD BX, 38                  ;aponta para o proximo nome(linha de baixo)
-        DEC CX
-        CMP CX, 0
-        JNE JMPSALVA1
-
-
+        LOOP LOOPNOMES
 
 
         ;CALL SAIDEC
@@ -158,7 +118,6 @@
                     CALL ENTDEC
                     MOV [BX + SI], AX
                     INC SI
-                                                                                            MOV DX, BX ;APENAS PARA TESTE
                     POP BX
                     RET                                         ;RETOMA O CONTROLE PARA A ROTINA
             ENTNOTAS ENDP
@@ -192,7 +151,6 @@
 
                 MOV [BX + SI], AX   ;ERRO??? NAO DEU UHUUUUUUUUUUUUUUU
 
-                                                    MOV DX, BX ;APENAS PARA TESTE
                 POP BX
                 POP CX
                 RET
