@@ -46,32 +46,10 @@ MAIN PROC
     LOOP LOOPNOMES
     CALL SAIDEC
 
-    ;LEA BX, NOMES
-    ;MOV AH, 02
-    ;MOV DX, [BX + SI]
-    ;OR DX, 30H
-    ;INT 21H
-
 
     mov ah,4ch          ; funcao de termino
     int 21h
 
-
-
-;CONFERE SE NOMES TEM A STRING
-    ;mov dl,10
-    ;mov ah,02
-    ;int 21h
-    ;lea DX, NOMES + BX
-    ;mov ah, 09
-    ;int 21h
-    ;ADD BX, 32
-    ;LOOP LOOPNOMES
-
-
-
-    ;mov ah,4ch                  ; funcao de termino
-    ;int 21h
 MAIN ENDP
 
 RECEBE_NOME PROC
@@ -105,13 +83,7 @@ ENTNOTAS PROC
         POP BX
         POP CX
 
-        ;POP DI                                      ;RECUPERA O ANTIGO VALOR DE BX PARA DI
-        ;DEC SI
-        ;SUB SI, CX
 
-        ;MOV [BX + SI], AX
-        ;LOOP LOOPNOTA
-        ;POP BX
         RET                                         ;RETOMA O CONTROLE PARA A ROTINA
 ENTNOTAS ENDP
 
