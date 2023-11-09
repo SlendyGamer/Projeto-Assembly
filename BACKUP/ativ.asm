@@ -1,0 +1,44 @@
+.MODEL SMALL
+.DATA
+    PULA_LINHA db 10D,13D,'$'   ;PULA LINHA
+    BUFFER DB 32                ;NUMERO DE CARACTERES QUE PODE SER LIDO
+           DB ?                 ;NUMERO DE ELEMENTOS LIDOS
+    STRING db 32 DUP(0)         ;ARMAZENA O TEXTO LIDO PARA IMPRESSAO
+    NOME DB "Nome do aluno: $"
+
+.CODE
+MAIN PROC
+    MOV AX, @DATA               ;INICIA O SEGMENTO DE DADOS
+    MOV DS, AX
+
+    LEA DX, NOME               ;APONTA DX PARA OFFSET NOME PARA IMPRIMIR SUA MENSAGEM
+    MOV AH, 9                   ;PREPARA AH PARA A IMPRESSAO DE UMA STRING
+    INT 21H                     ;IMPRIME A STRING NOME
+
+
+    LEA DX, BUFFER              ;APONTA DX PARA O OFFSET BUFFER, QUE VAI CAPTURAR UM INPUT DE STRING DO USUÁRIO
+    MOV AH, 0AH                 ;PREPARA AH PARA RECEBER UM STRING, ATÉ ENTER(13) SER CAPTURADO
+    INT 21H                     ;RECEBE A STRING DO USUÁRIO
+
+    LEA SI, BUFFER + 1           ;APONTA SI PARA O OFFSET BUFFER + 1, ASSIM ARMAZENANDO EM SI O NUMERO DE CARACTERES RECEBIDOS
+    MOV CL, [SI]
+    XOR CH, CH
+    INC CX
+    ADD SI, CX
+    MOV AL, '$'
+    MOV [SI], AL
+
+END_RECEBE_NOME:
+
+    lea dx, PULA_LINHA
+    mov ah,09h
+    int 21h
+
+    lea dx, STRING
+    mov ah,09h
+    int 21h
+
+    mov ah,4ch              ; funcao de termino
+    int 21h
+MAIN ENDP
+END MAIN
