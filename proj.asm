@@ -17,8 +17,7 @@
         MOV CX, 3
 
         PUSH BX                  ;MESMA SITUAÇÃO DE CX, BX CONTEM A INFORMAÇÃO DE QUE LINHA ESTAMOS, PORTANTO NAO PODEMOS PERDER ESSE VALOR      
-        LEA BX, TABELA + 34      ;PARA PODER DEFINIR SI COMO ELEMENTO 34, PRECISAMOS DEFINIR POR MEIO DE BX COMO PONTEIRO BASE
-        MOV SI, BX               
+        MOV SI, 34      ;PARA PODER DEFINIR SI COMO ELEMENTO 34, PRECISAMOS DEFINIR POR MEIO DE BX COMO PONTEIRO BASE             
 
         POP BX                   
     ENDM
@@ -77,7 +76,8 @@
         MOV CX, 5                   ;INICIA CONTADOR EM 5, POIS RECEBERA A INFORMAÇÃO DE 5 ESTUDANTES
 
 
-    LOOPNOMES:       
+    LOOPNOMES:   
+        XOR SI, SI    
         PULALINHA
 
         LEA DX, MSGNOME                ;IMPRIME A MENSAGEM EM 'NOME'
@@ -88,8 +88,14 @@
 
         PULALINHA
 
-        PREP_NOTA3X
+        ;PREP_NOTA3X
+                            PUSH CX                      ;CX ESTA EM USO MAS PRECISAREMOS UTILIZAR UM LOOP ABAIXO PARA RECEBER 3X NOTAS, PORTANTO SALVO SEU VALOR NA PILHA
+                            MOV CX, 3
 
+                            PUSH BX                  ;MESMA SITUAÇÃO DE CX, BX CONTEM A INFORMAÇÃO DE QUE LINHA ESTAMOS, PORTANTO NAO PODEMOS PERDER ESSE VALOR      
+                            MOV SI, 34      ;PARA PODER DEFINIR SI COMO ELEMENTO 34, PRECISAMOS DEFINIR POR MEIO DE BX COMO PONTEIRO BASE             
+
+                            POP BX                         
     RECEBENOTA:
         LEA DX, MSGNOTA             ;IMPRIME A MENSAGEM EM 'NOME'
         PRINTSTRING
@@ -102,8 +108,8 @@
         CALL CALCMEDIA
 
 
-        ADD BX, 38                  ;APONTA PARA A PROXIMA LINHA DA MATRIZ(PROXIMO ALUNO)
-                                                                LOOP LOOPNOMES
+        ADD BX, 37                  ;APONTA PARA A PROXIMA LINHA DA MATRIZ(PROXIMO ALUNO)
+    LOOP LOOPNOMES
 
     RETURN:
         PULALINHA
@@ -300,11 +306,10 @@
 
     SAITABELA PROC
         LEA BX, TABELA
-        MOV CX, 4
-        MOV SI, BX
-        ADD SI, 34                           
+        MOV CX, 5
         PULALINHA
     SAILINHA:
+        MOV SI, 34                         
         MOV DX, BX
         ADD DX, 2                
 
@@ -318,21 +323,19 @@
         MOV CX, 4
 
     SAINOTA:
-        ;PULALINHA
-        ;CALL SAIDEC
+        CALL SAIDEC
                                                 MOV AX, [BX + SI]
                                                 MOV DL, AL
                                                 OR DL, 30H
                                                 MOV AH, 02
                                                 INT 21H
 
-    ;    ESPACA
+        ESPACA
 
         INC SI
     LOOP SAINOTA
         POP CX
-        SUB SI, 4
-        ADD BX, 38
+        ADD BX, 37
         PULALINHA
     LOOP SAILINHA
         RET
@@ -360,10 +363,8 @@
                     INC CX                                      ;INCREMENTA O CONTADOR, ESSE SERÁ O NUMERO DE VEZES QUE A PILHA DEVERÁ SER ACESSADA PARA RECUPERAR OS VALORES DE DX SALVOS
                     
                     OR AX, AX                                   ;SE AX = 0
-                    JZ RETORNADEC                               ;SAI DO LOOP, POIS AX INTEIRO JA FOI SALVO NA PILHA
-                    JMP SEPARADEC                               ;SE AX != 0, CONTINUA COM AS DIVISÕES
+                    JNZ SEPARADEC                               ;SE AX != 0, CONTINUA COM AS DIVISÕES
 
-                RETORNADEC:
                     MOV AH, 02                                  ;PREPARA PARA A IMPRESSÃO DO NUMERO DECIMAL
 
                 RETORNALOOP:
