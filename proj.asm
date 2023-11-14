@@ -65,10 +65,10 @@
     MSGNOTA DB "NOTA DO ALUNO: $"
 
     TABELA DB 5 DUP (31, ?, 31 DUP(' '), '$', 4 DUP(?))          ;QUANTIDADE DE CARACTERES DA STRING EM TABELA + 1 (NAO CONTA O ENTER). STRING EM TABELA + 2 (MAX. 30 CARACTERES + ENTER + $). NOTAS EM  TABELA + 34, 35 E 36.
-                    ;32, ?, 32 DUP( $ ), 4 DUP(?)                                       ;MEDIA EM  TABELA + 37.NOVA LINHA DE 38 EM 38 (TABELA + 38) // DIRETAMENTE ABAIXO DO ELEMENTO QUE ESTA SENDO APONTADO.
-                    ;32, ?, 32 DUP( $ ), 4 DUP(?)
-                    ;32, ?, 32 DUP( $ ), 4 DUP(?)
-                    ;32, ?, 32 DUP( $ ), 4 DUP(?)
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?            ;MEDIA EM  TABELA + 37.NOVA LINHA DE 38 EM 38 (TABELA + 38) // DIRETAMENTE ABAIXO DO ELEMENTO QUE ESTA SENDO APONTADO.
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?
 
     MENUPRINC DB 'O QUE DESEJA FAZER?',10,13
               DB '1 - VER TABELA',10,13
@@ -352,7 +352,7 @@
         MOV AH, 09
         INT 21H
 
-        ESPACA
+        ;ESPACA
 
         PUSH CX
         MOV CX, 4
