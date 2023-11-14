@@ -49,7 +49,7 @@
         MOV DL, [BX]    ;RECEBE N DE CARACTERES DIGITADOS - 1(ENTER)
         INC BX
         ADD BX, DX      ;APONTA BX PARA A MESMA POSI??O PARA PODER INSERIR NA MEMORIA
-        MOV DL, '$'
+        MOV DL, ' '
 
         ; troca enter por $
         MOV [BX], DL
@@ -64,7 +64,7 @@
 
     MSGNOTA DB "NOTA DO ALUNO: $"
 
-    TABELA DB 5 DUP (32, ?, 32 DUP('$'), 4 DUP(?))          ;QUANTIDADE DE CARACTERES DA STRING EM TABELA + 1 (NAO CONTA O ENTER). STRING EM TABELA + 2 (MAX. 30 CARACTERES + ENTER + $). NOTAS EM  TABELA + 34, 35 E 36.
+    TABELA DB 5 DUP (31, ?, 31 DUP(' '), '$', 4 DUP(?))          ;QUANTIDADE DE CARACTERES DA STRING EM TABELA + 1 (NAO CONTA O ENTER). STRING EM TABELA + 2 (MAX. 30 CARACTERES + ENTER + $). NOTAS EM  TABELA + 34, 35 E 36.
                     ;32, ?, 32 DUP( $ ), 4 DUP(?)                                       ;MEDIA EM  TABELA + 37.NOVA LINHA DE 38 EM 38 (TABELA + 38) // DIRETAMENTE ABAIXO DO ELEMENTO QUE ESTA SENDO APONTADO.
                     ;32, ?, 32 DUP( $ ), 4 DUP(?)
                     ;32, ?, 32 DUP( $ ), 4 DUP(?)
@@ -80,9 +80,9 @@
              DB '2 - NOTAS',10,13
              DB '0 - RETORNAR',10,13,'$'
              
-    PESQUISA DB 1 DUP(32, ?, 32 DUP('$'))
+    PESQUISA DB 1 DUP(31, ?, 32 DUP(' '))
     
-    FFLUSH DB 32 DUP('$')
+    FFLUSH DB 31 DUP(' ')
 
     ESPACO DB ' $'
     
