@@ -64,11 +64,11 @@
 
     MSGNOTA DB "NOTA DO ALUNO: $"
 
-    TABELA DB 5 DUP (31, ?, 31 DUP(' '), '$', 4 DUP(?))          ;QUANTIDADE DE CARACTERES DA STRING EM TABELA + 1 (NAO CONTA O ENTER). STRING EM TABELA + 2 (MAX. 30 CARACTERES + ENTER + $). NOTAS EM  TABELA + 34, 35 E 36.
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)            ;MEDIA EM  TABELA + 37.NOVA LINHA DE 38 EM 38 (TABELA + 38) // DIRETAMENTE ABAIXO DO ELEMENTO QUE ESTA SENDO APONTADO.
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)
+    TABELA DB 5 DUP (31, ?, 31 DUP(' '), '$', 4 DUP(0))          ;QUANTIDADE DE CARACTERES DA STRING EM TABELA + 1 (NAO CONTA O ENTER). STRING EM TABELA + 2 (MAX. 30 CARACTERES + ENTER + $). NOTAS EM  TABELA + 34, 35 E 36.
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(0)            ;MEDIA EM  TABELA + 37.NOVA LINHA DE 38 EM 38 (TABELA + 38) // DIRETAMENTE ABAIXO DO ELEMENTO QUE ESTA SENDO APONTADO.
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(0)
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(0)
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(0)
 
     MENUPRINC DB 'O QUE DESEJA FAZER?',10,13
               DB '1 - VER TABELA',10,13
@@ -99,12 +99,15 @@
     
     NOVANOTA DB 'Digite a nova nota: $'
 
+    LEGENDA DB 'NOME',27 DUP (' '),'P1 ','P2 ','P3 ', 'MF$'
 .CODE
 
     MAIN PROC
         MOV AX, @DATA               ;INICIA O SEGMENTO DE DADOS E O SEGMENTO EXTRA
         MOV DS, AX
         MOV ES, AX
+        MOV AX, 0003H
+        INT 10H
 
         XOR BX, BX                  ;ZERA BX PARA TER CERTEZA QUE FOI INICIADO COM 0
         MOV CX, 5                   ;INICIA CONTADOR EM 5, POIS RECEBERA A INFORMA??O DE 5 ESTUDANTES
@@ -359,6 +362,9 @@
     SAITABELA PROC
         LEA BX, TABELA
         MOV CX, 5
+        LEA DX, LEGENDA
+        PRINTSTRING
+        PULALINHA
     SAILINHA:
         MOV SI, 34                         
         MOV DX, BX
@@ -374,6 +380,27 @@
         MOV CX, 4
 
     SAINOTA:
+        
+        PUSH CX
+        PUSH AX
+        PUSH DX
+        PUSH BX
+        XOR BH, BH
+        MOV AH, 09
+        MOV AL, 0
+        MOV CX, 2
+        CMP BYTE PTR [BX + SI], 5
+        JAE VERDE
+        MOV BL, 12
+        JMP RED
+        VERDE:
+        MOV BL,2
+        RED:
+        INT 10H
+        POP BX
+        POP DX
+        POP AX
+        POP CX
         CALL SAIDEC
 
         ESPACA
@@ -398,6 +425,10 @@
                 ;NAO DEVOLVE NADA PARA MAIN
                     XOR AX, AX
                     MOV AL, [BX + SI]
+                    CMP AL, 10
+                    JAE NAO_UNICO
+                    ESPACA
+                    NAO_UNICO:
                 PREPARADIV:
                     XOR CX, CX                                  ;ZERA CX POIS ELE SERA USADO COMO CONTADOR
                     MOV BX, 10                                  ;DEFINE BX COMO 10, J? QUE AS DIVIS?ES SER?O POR 10
