@@ -65,10 +65,10 @@
     MSGNOTA DB "NOTA DO ALUNO: $"
 
     TABELA DB 5 DUP (31, ?, 31 DUP(' '), '$', 4 DUP(?))          ;QUANTIDADE DE CARACTERES DA STRING EM TABELA + 1 (NAO CONTA O ENTER). STRING EM TABELA + 2 (MAX. 30 CARACTERES + ENTER + $). NOTAS EM  TABELA + 34, 35 E 36.
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?            ;MEDIA EM  TABELA + 37.NOVA LINHA DE 38 EM 38 (TABELA + 38) // DIRETAMENTE ABAIXO DO ELEMENTO QUE ESTA SENDO APONTADO.
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?
-                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)            ;MEDIA EM  TABELA + 37.NOVA LINHA DE 38 EM 38 (TABELA + 38) // DIRETAMENTE ABAIXO DO ELEMENTO QUE ESTA SENDO APONTADO.
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)
+                    ;31, ?, 31 DUP(' '), '$', 4 DUP(?)
 
     MENUPRINC DB 'O QUE DESEJA FAZER?',10,13
               DB '1 - VER TABELA',10,13
@@ -92,6 +92,12 @@
                 DB '1 - P1',10,13
                 DB '2 - P2',10,13
                 DB '3 - P3',10,13,'$'
+                
+    PESQNOME DB 'Digite o nome de quem quer editar: $'
+    
+    NOVONOME DB 'Digite o novo nome: $'
+    
+    NOVANOTA DB 'Digite a nova nota: $'
 
 .CODE
 
@@ -201,18 +207,28 @@
         JMP SELECT_PESQ                          ;SE FOR QUALQUER OUTRA COISA AL?M DE 1,2 OU 3, PEDE INPUT NOVAMENTE
 
     EDITNOME:
-        
+        PULALINHA
+        LEA DX, PESQNOME
+        PRINTSTRING
         LEA DX, PESQUISA
         CALL RECEBE_NOME
+        PULALINHA
         INC DX
         ;FFLUSH POR ESCOLHA PODE SER INSERIDO AQUI
+        PUSH DX
+        LEA DX, NOVONOME
+        PRINTSTRING
+        POP DX
         CALL PESQ_NOME
         JMP RETURN
         
     EDITNOTA:
-
+        PULALINHA
+        LEA DX, PESQNOME
+        PRINTSTRING
         LEA DX, PESQUISA
         CALL RECEBE_NOME
+        PULALINHA
         INC DX
         CALL PESQ_NOTA
         ;FFLUSH POR ESCOLHA PODE SER INSERIDO AQUI OU NO FINAL DA FUN??O ACIMA
@@ -513,7 +529,7 @@ PESQ_NOME ENDP
                     POP BX
                     
                 REPE CMPSB
-                JNZ NOT_EQUAL_NOME
+                JNZ NOT_EQUAL_NOME1
                 
                     ;ESCOLHER QUAL NOTA ALTERAR (P1, P2, P3)
                     ;ALTERAR
@@ -539,15 +555,32 @@ PESQ_NOME ENDP
                     JE P3                              ;PULA PARA DEC_ENTRADA
 
                     JMP SELECT_PROVA                          ;SE FOR QUALQUER OUTRA COISA AL?M DE 1,2 OU 3, PEDE INPUT NOVAMENTE
-        
-                    
+                PESQNOTA1:
+                JMP PESQNOTA
+                NOT_EQUAL_NOME1:
+                JMP NOT_EQUAL_NOME
                 P1:
+                    PULALINHA
+                    PUSH DX
+                    LEA DX, NOVANOTA
+                    PRINTSTRING
+                    POP DX
                     ADD SI, 34
                     JMP RECEBEPROVA
                 P2:
+                    PULALINHA
+                    PUSH DX
+                    LEA DX, NOVANOTA
+                    PRINTSTRING
+                    POP DX
                     ADD SI, 35
                     JMP RECEBEPROVA
                 P3:
+                    PULALINHA
+                    PUSH DX
+                    LEA DX, NOVANOTA
+                    PRINTSTRING
+                    POP DX
                     ADD SI, 36
                     
                 RECEBEPROVA:
@@ -563,7 +596,7 @@ PESQ_NOME ENDP
                 ADD BX, 38
                 POP CX
                 POP DX
-                LOOP PESQNOTA
+                LOOP PESQNOTA1
                 
                 CMP AL, 5
                 JNE FIMNOTA
